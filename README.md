@@ -1,2 +1,3 @@
 # myeditor
-A text editor written using Python and the tkinter library
+
+This is my introduction to Python and the tkinter library.  
