@@ -29,7 +29,6 @@ def tab_pressed(event: tk.Event) -> str:
   text_area.insert("insert", " " * 4)
   return "break"
 
-
 def open_file():
    # Check if there are unsaved changes
     if text_area.get(1.0, tk.END).strip():
@@ -46,16 +45,12 @@ def open_file():
         with open(file_path, "r") as file:
             text_area.insert(tk.END, file.read())
 
-
-
 def save_file():
   files = [('All Files',"*.*"),('Python Files', '*.py'), ('Perl Files', '*.pl *.plx'), ('Text Files', '*.txt'), ('All Files', '*.*')]
   file_path = asksaveasfilename(filetypes=files, defaultextension='.py')
   if file_path:
     with open(file_path, 'w') as file:
         file.write(text_area.get(1.0, tk.END))
-
-
 
 def new_file():
     # Prompt user to save current contents (if any)
@@ -163,7 +158,6 @@ def show_edit_menu(event):
   # Pop up the edit menu at the clicked coordinates
   edit_menu.tk_popup(x, y)
 
-
 def exit_app():
   response = askyesno("Really Exit?", "Do you really want to exit?")
   if response:
@@ -243,7 +237,6 @@ about_menu = tk.Menu(menu_bar, tearoff=0)
 about_menu.add_command(label="Version", command=show_about_dialog)
 menu_bar.add_cascade(label="About", menu=about_menu)
 
-
 # Keyboard Bindings
 root.bind("<Control-a>", lambda event: select_all_text())
 root.bind("<Control-c>", lambda event: copy_text())
@@ -268,6 +261,7 @@ text_area.bind("<Tab>",tab_pressed)
 root.config(menu=menu_bar)
 
 root.mainloop()
+
 
 
 
