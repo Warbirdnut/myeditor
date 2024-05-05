@@ -26,12 +26,12 @@ def on_mouse_move(event):
 # Key function
 
 def tab_pressed(event: tk.Event) -> str:
-    text_area.insert("insert", " "  *  4)
-    return "break"
-    
+  text_area.insert("insert", " " * 4)
+  return "break"
+
 
 def open_file():
-    # Check if there are unsaved changes
+   # Check if there are unsaved changes
     if text_area.get(1.0, tk.END).strip():
         response = askyesno("Save Changes", "Do you want to save changes before opening a new file?")
         if response:
@@ -46,12 +46,16 @@ def open_file():
         with open(file_path, "r") as file:
             text_area.insert(tk.END, file.read())
 
+
+
 def save_file():
-    files = [('All Files',"*.*"),('Python Files', '*.py'), ('Perl Files', '*.pl *.plx'), ('Text Files', '*.txt'), ('All Files', '*.*')]
-    file_path = asksaveasfilename(filetypes=files, defaultextension='.py')
-    if file_path:
-        with open(file_path, 'w') as file:
-            file.write(text_area.get(1.0, tk.END))
+  files = [('All Files',"*.*"),('Python Files', '*.py'), ('Perl Files', '*.pl *.plx'), ('Text Files', '*.txt'), ('All Files', '*.*')]
+  file_path = asksaveasfilename(filetypes=files, defaultextension='.py')
+  if file_path:
+    with open(file_path, 'w') as file:
+        file.write(text_area.get(1.0, tk.END))
+
+
 
 def new_file():
     # Prompt user to save current contents (if any)
@@ -59,15 +63,15 @@ def new_file():
         response = askyesno("Save Changes", "Do you want to save changes before creating a new file?")
         if response:
             save_file()
-    # Clear the text widget
-    text_area.delete(1.0, tk.END)
- 
+	# Clear the text widget
+    text_area.delete(1.0, tk.END)	
+	
 def select_all_text():
-    # Select all text in the text widget
+
     text_area.tag_add("sel", "1.0", "end")
 
 def select_text():
-    pass
+  pass
 
 def copy_text():
   selected_text = text_area.selection_get()
@@ -75,26 +79,19 @@ def copy_text():
     text_area.clipboard_clear()
     text_area.clipboard_append(selected_text)
 
-
 def cut():
-  # Get the selected text
   selected_text = text_area.selection_get()
-
-  # Check if there's selected text
   if not selected_text:
     return
-
   # Cut the selected text (remove from the widget)
   text_area.delete("sel.first", "sel.last")
 
   # Add the selected text to the clipboard
   text_area.clipboard_clear()
   text_area.clipboard_append(selected_text)
-
 def paste_text():
-    # Paste the contents of the clipboard into the text widget    
-    text_area.insert("insert", text_area.clipboard_get())
- 
+   text_area.insert("insert", text_area.clipboard_get())
+
 def find():
     # Get the search term from a dialog box
     search_term = tk.simpledialog.askstring("Find", "Enter search term:")
@@ -111,7 +108,6 @@ def find():
         match_pos = text_area.search(search_term, start_pos, tk.END)
         if not match_pos:
             break
-
         # Get the end position of the match
         end_pos = f"{match_pos}+{len(search_term)}c"
 
@@ -120,8 +116,8 @@ def find():
         text_area.tag_config("highlight", background="yellow")
 
         # Update start position for next search
-        start_pos = end_pos
-
+        start_pos = end_pos		
+		
 def replace():
     original_string = askstring("Replace", "Enter the original string:")
     replacement_string = askstring("Replace", "Enter the replacement string:")
@@ -153,11 +149,11 @@ def replace():
                 # Move to the next occurrence
                 start_idx = text_area.search(original_string, end_idx, stopindex=tk.END)
         # Remove all highlights after a brief delay (optional)
-        text_area.after(2000, lambda: text_area.tag_remove("highlight", "1.0", tk.END))
-
+        text_area.after(2000, lambda: text_area.tag_remove("highlight", "1.0", tk.END))  
+		
 def show_about_dialog():
-    version = ".01"  # Replace with your actual version
-    showinfo("About", f"Application Version: {version}")
+  version = ".01"  # Replace with your actual version
+  showinfo("About", f"Application Version: {version}")
 
 def show_edit_menu(event):
   # Get the coordinates of the right click
@@ -169,22 +165,22 @@ def show_edit_menu(event):
 
 
 def exit_app():
-    response = askyesno("Really Exit?", "Do you really want to exit?")
-    if response:
-        if text_area.get(1.0, tk.END).strip():
-            response = askyesno("Save Changes", "Do you want to save changes before exiting?")
-            if response:
-                save_file()
-    root.destroy()
+  response = askyesno("Really Exit?", "Do you really want to exit?")
+  if response:
+      if text_area.get(1.0, tk.END).strip():
+          response = askyesno("Save Changes", "Do you want to save changes before exiting?")
+          if response:
+              save_file()
+  root.destroy()
 
 def on_scroll(event):
-    # Identify the location of the mouse click
-    if event.delta > 0:
-        # Scroll down if mouse wheel is scrolled down (positive delta)
-        text_area.yview_scroll(1, 'units')
-    else:
-        # Scroll up if mouse wheel is scrolled up (negative delta)
-        text_area.yview_scroll(-1, 'units')
+  # Identify the location of the mouse click
+  if event.delta > 0:
+    # Scroll down if mouse wheel is scrolled down (positive delta)
+    text_area.yview_scroll(1, 'units')
+  else:
+    # Scroll up if mouse wheel is scrolled up (negative delta)
+    text_area.yview_scroll(-1, 'units')
 
 root = tk.Tk()
 
@@ -201,10 +197,17 @@ root.iconbitmap('./icon.ico')
 
 # Text Widget
 text_area = tk.Text(root, wrap=tk.WORD, font=('Arial',14))
-text_area.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
-# Bind the scrollbar to the Text widget
-text_area.bind("<MouseWheel>", on_scroll)
+# Scrollbar
+scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL)
+
+# Create scrollbar-text area association
+text_area.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=text_area.yview)
+
+# Pack the widgets
+text_area.pack(fill=tk.BOTH, expand=True, padx=5, pady=5, side=tk.LEFT)
+scrollbar.pack(fill=tk.BOTH, side=tk.RIGHT)
 
 # Bind the scrollbar to the Text widget
 text_area.bind("<MouseWheel>", on_scroll)
@@ -263,24 +266,8 @@ root.protocol("WM_DELETE_WINDOW", exit_app)
 text_area.bind("<Tab>",tab_pressed)
 
 root.config(menu=menu_bar)
+
 root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
