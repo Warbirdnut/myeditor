@@ -45,6 +45,36 @@ def cut_text():
         # Remove the selected text from the text widget
         text_widget.delete(tk.SEL_FIRST, tk.SEL_LAST)
 
+def search_text_new(text_widget):
+    # Get the search query from the user
+    search_query = simpledialog.askstring("Search", "Enter search query:")
+
+    if search_query:
+        # Clear any previous tags
+        text_widget.tag_remove("highlight", "1.0", tk.END)
+
+        # Search for the query in the text widget
+        start_pos = "1.0"
+        while True:
+            start_pos = text_widget.search(search_query, start_pos, stopindex=tk.END, nocase=True)
+            if not start_pos:
+                break
+
+            # Highlight the found occurrence
+            end_pos = f"{start_pos}+{len(search_query)}c"
+            text_widget.tag_add("highlight", start_pos, end_pos)
+            text_widget.tag_config("highlight", background="yellow")
+
+            # Prompt the user to continue
+            user_response = messagebox.askyesno("Next occurrence", "Found. Continue?", parent=text_widget.winfo_toplevel())
+            if not user_response:
+                # Remove the highlight from all occurrences
+                text_widget.tag_remove("highlight", "1.0", tk.END)
+                break
+
+            # Move to the next position
+            start_pos = end_pos
+
 def search_text(text_widget):
     # Get the search query from the user
     search_query = simpledialog.askstring("Search", "Enter search query:")
@@ -99,8 +129,6 @@ def open_file(text_widget):
             text_widget.delete('1.0', 'end')  # Clear the current content
             text_widget.insert('1.0', content)  # Insert new content
     
-
-
 def save_file(text_widget):
     if text_widget.get(1.0, tk.END).strip():
         filename = fd.asksaveasfilename(
@@ -186,6 +214,9 @@ if __name__ == "__main__":
     text_widget.bind("<Up>", handle_arrow_keys)
     text_widget.bind("<Down>", handle_arrow_keys) 
     root.mainloop()
+
+
+
 
 
 
