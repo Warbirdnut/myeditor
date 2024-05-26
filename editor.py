@@ -15,9 +15,6 @@ FILETYPES = [
 def custom_dialog(menu_option_name):
     messagebox.showinfo("Action",f"You selected the '{menu_option_name}' menu option.")
 
-
-
-
 def copy_text(text_widget):
     """Copy the highlighted text in the text widget to the clipboard."""
     try:
@@ -34,35 +31,11 @@ def copy_text(text_widget):
         # Handle other exceptions
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
-
-    # Create a dialog box
-    dialog = tk.Toplevel()
-    dialog.title("Replace Text")
-
     # Calculate the dimensions for the dialog
     root_width = root.winfo_width()
     root_height = root.winfo_height()
     dialog_width = root_width // 4
     dialog_height = root_height // 4
-
-    # Set the dialog size (format: widthxheight)
-    dialog.geometry(f"{dialog_width}x{dialog_height}")
-
-    # Create labels and text entry widgets
-    replace_label = tk.Label(dialog, text="Replace text:")
-    replace_entry = tk.Entry(dialog)
-    replace_with_label = tk.Label(dialog, text="Replace with:")
-    replace_with_entry = tk.Entry(dialog)
-
-    # Create the OK button
-    ok_button = tk.Button(dialog, text="OK", command=ok_button_clicked)
-
-    # Pack widgets
-    replace_label.pack()
-    replace_entry.pack()
-    replace_with_label.pack()
-    replace_with_entry.pack()
-    ok_button.pack()
 
 def cut_text():
     # Get the selected text
@@ -187,7 +160,6 @@ def main(root):
     edit_menu.add_command(label="Cut", command=lambda: cut_text())
     edit_menu.add_command(label="Copy", command=lambda: copy_text(text_widget))
     edit_menu.add_command(label="Paste", command=lambda: paste_text(text_widget))
-    edit_menu.add_command(label="Undo", command=lambda: custom_dialog("Edit -> Undo"))
     
     # Create the search menu
     search_menu = tk.Menu(menubar, tearoff=0)
@@ -202,8 +174,8 @@ def main(root):
     menubar.add_cascade(label="About", menu=about_menu)
 
     # Add items to the menu
-    about_menu.add_command(label="Help", command=lambda: custom_dialog("About -> Help"))
-    about_menu.add_command(label="Version", command=lambda: custom_dialog("About -> Version"))
+    about_menu.add_command(label="Help", command = lambda: custom_dialog("About -> Help"))
+    about_menu.add_command(label="Version", command = lambda: custom_dialog("About -> Version"))
     
 
     
@@ -214,6 +186,8 @@ if __name__ == "__main__":
     text_widget.bind("<Up>", handle_arrow_keys)
     text_widget.bind("<Down>", handle_arrow_keys) 
     root.mainloop()
+
+
 
 
 
